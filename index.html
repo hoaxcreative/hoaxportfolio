@@ -463,6 +463,9 @@ const FMT = {
   logo:  { label: 'Logo', size: '', ar: null },
   caso:  { label: 'Estudo de caso', size: '3840×2160', ar: '16/9' },
   kit:   { label: 'Brand toolkit', size: '', ar: null, full: true },
+  impresso: { label: 'Impresso', size: '', ar: null },
+  fotopdv: { label: 'Foto · ponto de venda', size: '', ar: null },
+  banner: { label: 'Banner web', size: '1920×600', ar: null, full: true },
 };
 
 const THEMES = [
@@ -555,7 +558,22 @@ const THEMES = [
     desc: 'Trabalhos que vão além do feed: identidade visual, lançamento de produto, embalagem, ponto de venda, merch e modelagem 3D.',
     tags: ['Identidade visual', 'Embalagem', 'Estampa', 'Merch', 'Logotipo', 'Modelagem 3D'],
     projects: [
-      { name: 'Cora', client: 'Brownies artesanais · identidade visual', otherLabel: 'Brand toolkit', desc: 'Identidade para uma marca de brownies: uma cachorrinha pega no flagra com um pedaço na pata, lettering redondo feito à mão e cores de confeitaria. Toolkit com variações de logo, paleta, tipografia, regras de uso, estampa, rótulos, caixa e post.',
+      { name: 'Açayba', client: 'Açaí soft · marca, ponto de venda e cardápio', otherLabel: 'Ponto de venda e impressos', desc: 'Identidade do açaí soft da Açayba, com a folha do açaizeiro abraçando o fruto, ouro sobre roxo. Toolkit de marca e aplicação em quiosque, carrinho, adesivagem da máquina, uniforme, placa, cardápio e banners para captar parceiros.',
+        items: [
+          ['acayba/kit-marca', 'A força do açaí, da Amazônia pro cone', 'kit', '2400/1198'],
+          ['acayba/kit-variacoes', 'Variações de marca', 'kit', '2400/600'],
+          ['acayba/kit-cores', 'Paleta de cores', 'kit', '2400/888'],
+          ['acayba/kit-tipografia', 'Tipografia, regras e grafismo', 'kit', '2400/1612'],
+          ['acayba/banner-feed', 'Oportunidade, facilidade e lucro', 'feed'],
+          ['acayba/cardapio-mockup', 'Cardápio frente e verso · mockup', 'mock', '3/2'],
+          ['acayba/quiosque', 'Quiosque · mockup', 'mock', '3/2'],
+          ['acayba/carrinho', 'Carrinho adesivado', 'fotopdv', '3/4'],
+          ['acayba/maquina', 'Adesivagem da máquina · mockup', 'mock', '1011/1181'],
+          ['acayba/placa', 'Placa A4', 'impresso', '990/1400'],
+          ['acayba/uniforme', 'Uniforme · mockup', 'mock', '3/2'],
+          ['acayba/banner-site', 'Banner do site', 'banner', '1920/600'],
+        ] },
+      { name: 'Cora', client: 'Brownies artesanais · identidade visual', desc: 'Identidade para uma marca de brownies: uma cachorrinha pega no flagra com um pedaço na pata, lettering redondo feito à mão e cores de confeitaria. Toolkit com variações de logo, paleta, tipografia, regras de uso, estampa, rótulos, caixa e post.',
         items: [
           ['cora/cora-marca', 'Brownie bom de verdade', 'kit', '2400/1156'],
           ['cora/cora-variacoes', 'Variações de marca', 'kit', '2400/601'],
@@ -686,7 +704,7 @@ const pad = n => String(n).padStart(2, '0');
 const DESTAQUE = {
   eventos: ['Samba do Barcha', 'Ginga Recife', 'Beerchef'],
   digital: ['KOVA'],
-  marca: ['Cora', 'Terranutri', 'Nutriz Food', 'Fresh Coolra', 'Hoax', 'Display de mesa iFood'],
+  marca: ['Açayba', 'Cora', 'Terranutri', 'Nutriz Food', 'Fresh Coolra', 'Hoax', 'Display de mesa iFood'],
   gastronomia: ['Akira', 'Lucinha Cascão', 'Xerém Marisqueira'],
   editorial: ['Real Fight Club', 'Revista Avante-Gard'],
 };
@@ -719,13 +737,14 @@ THEMES.forEach((t, ti) => {
         <span class="fmt">${esc(f.label)}</span></button>`;
     };
     // Separa as peças por formato: stories, feed e o que fica fora do Instagram
-    const kind = fmt => ['story', 'reels'].includes(fmt) ? 'story' : ['feed', 'feed34', 'feedS'].includes(fmt) ? 'feed' : 'outro';
+    const kind = fmt => fmt === 'kit' ? 'kit' : ['story', 'reels'].includes(fmt) ? 'story' : ['feed', 'feed34', 'feedS'].includes(fmt) ? 'feed' : 'outro';
     const groups = [
+      { key: 'kit', label: 'Brand toolkit' },
       { key: 'story', label: p.items.some(it => it[2] === 'reels') ? 'Stories e capas de reels' : 'Stories' },
       { key: 'feed', label: 'Feed' },
       { key: 'outro', label: p.otherLabel || 'Outras peças' },
     ].map(g => ({ ...g, items: p.items.filter(it => kind(it[2]) === g.key) })).filter(g => g.items.length);
-    const onlyOther = groups.length === 1 && groups[0].key === 'outro';
+    const onlyOther = groups.length === 1 && ['outro', 'kit'].includes(groups[0].key);
     const strips = groups.map(g => `<div class="group">
         ${onlyOther ? '' : `<div class="group-label mono"><span>${esc(g.label)}</span><span class="muted">${pad(g.items.length)}</span></div>`}
         <div class="strip">${g.items.map(piece).join('')}</div>
